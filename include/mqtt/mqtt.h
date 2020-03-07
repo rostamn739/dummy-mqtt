@@ -93,6 +93,27 @@ using Unsub = detail::MqttUnsubsribe;
 using Sub = detail::MqttSubscribe;
 using ConnAck = detail::MqttConnack;
 using Conn = detail::MqttConnect;
+
+using PubAck = detail::MqttAck;
+using PubRec = detail::MqttAck;
+using PubRel = detail::MqttAck;
+using PubComp = detail::MqttAck;
+using UnSubAck = detail::MqttAck;
+
+using PingReq = common::MqttHeader;
+using PingResp = common::MqttHeader;
+using DConn = common::MqttHeader;
+
+union Generic {
+    packets::Ack ack;
+    common::MqttHeader header;
+    packets::Conn connect;
+    packets::ConnAck connack;
+    packets::SubAck suback;
+    packets::Pub publish;
+    packets::Sub subscribe;
+    packets::Unsub unsubscribe;
+};
 }
 }
 
