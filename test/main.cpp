@@ -1,5 +1,7 @@
 #include <iostream>
 #include <gtest/gtest.h>
+#include "mqtt/common.h"
+#include "mqtt/mqtt.h"
 
 TEST(DummyCpp, testcase) {
     std::cout << "hello from dummymqtt_test";
