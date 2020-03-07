@@ -3,9 +3,9 @@
 
 #include "mqtt/mqtt.h"
 #include "./pack.h"
+#include "./encode.h"
 
 namespace dummymqtt::impl {
-inline constexpr int max_len_bytes = 4;
 namespace detail {
 
 struct Stateless {
@@ -51,9 +51,63 @@ class BeaverImpl:
         protected TEncoder,
         protected TPacker {
 public:
-    ~BeaverImpl() override { }; // NOLINT(hicpp-use-equals-default)
+    size_t unpack_mqtt_connect(
+            const unsigned char *raw,
+            common::MqttHeader *hdr,
+            mqtt::packets::Generic *pkt
+            ) {
+        mqtt::packets::Conn connect = { .header = *hdr };
+        pkt->connect = connect;
+
+        const unsigned char *init = raw;
+        size_t len = TEncoder::decode_length(&raw);
+
+        raw = init + 8;
+        pkt->connect.byte = TPacker::unpack_u8(&raw);
+        pkt->connect.payload.keepalive =
+                TPacker::unpack_u16(&raw);
+
+        uint16_t cid_len = TPacker::unpack_u16(&raw);
+        if (cid_len > 0) {
+            pkt->connect.payload.client_id =
+                    static_cast<unsigned char *>(operator new(cid_len + 1));
+            TPacker::unpack_bytes(&raw, cid_len,
+                    pkt->connect.payload.client_id);
+        }
+        if (pkt->connect.bits.will == 1U) {
+            uint16_t will_topic_len = TPacker::unpack_u16(&raw);
+            pkt->connect.payload.will_topic =
+                    static_cast<unsigned char *>(operator new(will_topic_len + 1));
+            TPacker::unpack_bytes(&raw, will_topic_len,
+                    pkt->connect.payload.will_topic);
+
+            uint16_t will_message_len = TPacker::unpack_u16(&raw);
+            pkt->connect.payload.will_message =
+                    static_cast<unsigned char *>(operator new(will_message_len + 1));
+            TPacker::unpack_bytes(&raw, will_message_len,
+                    pkt->connect.payload.will_message);
+        }
+        if (pkt->connect.bits.username == 1U) {
+            uint16_t username_len = TPacker::unpack_u16(&raw);
+            pkt->connect.payload.username =
+                    static_cast<unsigned char *>(operator new(username_len + 1));
+            TPacker::unpack_bytes(&raw, username_len,
+                    pkt->connect.payload.username);
+        }
+
+        if (pkt->connect.bits.password == 1U) {
+            uint16_t password_len = TPacker::unpack_u16(&raw);
+            pkt->connect.payload.password =
+                    static_cast<unsigned char *>(operator new(password_len + 1));
+            TPacker::unpack_bytes(&raw, password_len,
+                    pkt->connect.payload.password);
+        }
+        return len;
+    }
+    ~BeaverImpl() override { }; // NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
 private:
 };
+using DefaultBeaverImpl = BeaverImpl<impl::Encoder, impl::Packer>;
 }
 
 #endif //DUMMYMQTT_IMPL_H

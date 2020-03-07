@@ -3,18 +3,19 @@
 
 namespace dummymqtt::common {
 struct Def {
-    constexpr static int mqtt_header_len    = 2;
-    constexpr static int mqtt_ack_len       = 4;
+    inline constexpr static int mqtt_header_len    = 2;
+    inline constexpr static int mqtt_ack_len       = 4;
+    inline constexpr static int max_len_bytes      = 4;
     struct GenBytes {
-        constexpr static int connack    = 0x20;
-        constexpr static int publish    = 0x30;
-        constexpr static int puback     = 0x40;
-        constexpr static int pubrec     = 0x50;
-        constexpr static int pubrel     = 0x60;
-        constexpr static int pubcomp    = 0x70;
-        constexpr static int suback     = 0x90;
-        constexpr static int unsuback   = 0xB0;
-        constexpr static int pingresp   = 0xD0;
+        inline constexpr static int connack    = 0x20;
+        inline constexpr static int publish    = 0x30;
+        inline constexpr static int puback     = 0x40;
+        inline constexpr static int pubrec     = 0x50;
+        inline constexpr static int pubrel     = 0x60;
+        inline constexpr static int pubcomp    = 0x70;
+        inline constexpr static int suback     = 0x90;
+        inline constexpr static int unsuback   = 0xB0;
+        inline constexpr static int pingresp   = 0xD0;
     };
     enum class Qos : int {
         at_most_once,

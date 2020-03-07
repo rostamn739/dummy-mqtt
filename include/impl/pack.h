@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <netinet/in.h>
 
+#include "mqtt/mqtt.h"
+
 namespace dummymqtt::impl {
 namespace {
 class DefaultPacker {
