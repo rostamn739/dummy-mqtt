@@ -2,8 +2,10 @@
 #define DUMMYMQTT_IMPL_H
 
 #include "mqtt/mqtt.h"
+#include "./pack.h"
 
 namespace dummymqtt::impl {
+inline constexpr int max_len_bytes = 4;
 namespace detail {
 
 struct Stateless {
@@ -49,7 +51,7 @@ class BeaverImpl:
         protected TEncoder,
         protected TPacker {
 public:
-    ~BeaverImpl() override { };
+    ~BeaverImpl() override { }; // NOLINT(hicpp-use-equals-default)
 private:
 };
 }
