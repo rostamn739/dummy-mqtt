@@ -9,3 +9,12 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+uripp.config
+uripp.creator**
+uripp.files
+uripp.includes
+**.autosave
+build/
+.idea/
+cmake-build-debug/
+
