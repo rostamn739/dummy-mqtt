@@ -1,7 +1,7 @@
 #ifndef DUMMYMQTT_MQTT_H
 #define DUMMYMQTT_MQTT_H
 
-#include "common.h"
+#include "./common.h"
 namespace dummymqtt::mqtt { // NOLINT(modernize-concat-nested-namespaces)
 namespace packets::detail {
 
